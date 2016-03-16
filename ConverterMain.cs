@@ -8,7 +8,7 @@
 
 	public static class ConverterMain
 	{
-		private const string PathToConverter = @"\VGMStream\convert.exe";
+		private const string PathToConverter = @"VGMStream\convert.exe";
 
 		public static void Main(string[] path)
 		{
@@ -19,6 +19,12 @@
 
 			var inputPath = path[0];
 			var outputPath = SetOutputPath(path);
+
+			if (!File.Exists(inputPath))
+			{
+				Console.WriteLine($"File or folder \"{inputPath}\" not found!");
+				return;
+			}
 
 			var attributes = File.GetAttributes(inputPath);
 			var inputIsDirectory = (attributes & FileAttributes.Directory) == FileAttributes.Directory;
@@ -45,11 +51,6 @@
 			else
 			{
 				outputPath = new FileInfo(path[0]).DirectoryName + @"\converted\";
-
-				if (!Directory.Exists(outputPath))
-				{
-					Directory.CreateDirectory(outputPath + @"\converted\");
-				}
 			}
 
 			return outputPath;
@@ -60,7 +61,7 @@
 			if (path.Length == 0)
 			{
 				Console.WriteLine("BCSTM To Wav Converter");
-				Console.WriteLine("Usage: BCSTM-to-WAV.exe FolderOrFile outputPath");
+				Console.WriteLine("Usage: BCSTM-to-WAV.exe FolderOrFile OutputPath");
 #if !DEBUG
 				Console.WriteLine("Press any key to exit...");
 				Console.ReadKey();
