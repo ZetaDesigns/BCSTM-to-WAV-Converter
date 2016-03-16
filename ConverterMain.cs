@@ -4,14 +4,15 @@
 	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
+	using System.Reflection;
 	using System.Threading.Tasks;
 
 	public static class ConverterMain
 	{
-		private const string PathToConverter = @"VGMStream\convert.exe";
-
+		private const string PathToConverter = "VGMStream\\convert.exe";
 		public static void Main(string[] path)
 		{
+			
 			if (ArgumentsAreInvalid(path))
 			{
 				return;
@@ -27,6 +28,12 @@
 			}
 
 			var attributes = File.GetAttributes(inputPath);
+
+			if (!Directory.Exists(outputPath))
+			{
+				Directory.CreateDirectory(outputPath);
+			}
+
 			var inputIsDirectory = (attributes & FileAttributes.Directory) == FileAttributes.Directory;
 			if (inputIsDirectory)
 			{
@@ -98,12 +105,14 @@
 					throw new FileNotFoundException($"File {file.Name} not found!");
 				}
 
-				var converterProcess = new ProcessStartInfo(PathToConverter);
+				var converterProcess = new ProcessStartInfo(PathToConverter)
+											{
+												Arguments = $"-o {Path.GetFileNameWithoutExtension(inputPath)}.wav {file}",
+												WorkingDirectory = outputDir,
+												RedirectStandardOutput = true,
+												UseShellExecute = false
+											};
 
-				converterProcess.Arguments = $"-o {Path.GetFileNameWithoutExtension(inputPath)}.wav {file}";
-				converterProcess.WorkingDirectory = outputDir;
-				converterProcess.RedirectStandardOutput = true;
-				converterProcess.UseShellExecute = false;
 
 				var process = Process.Start(converterProcess);
 				process.WaitForExit();
