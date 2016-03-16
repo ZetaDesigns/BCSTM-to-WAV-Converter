@@ -20,7 +20,7 @@
 			var inputPath = path[0];
 			var outputPath = SetOutputPath(path);
 
-			if (!File.Exists(inputPath))
+			if (!Directory.Exists(inputPath) && !File.Exists(inputPath))
 			{
 				Console.WriteLine($"File or folder \"{inputPath}\" not found!");
 				return;
