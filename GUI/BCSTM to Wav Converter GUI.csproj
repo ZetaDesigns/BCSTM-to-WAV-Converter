@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BCSTMConverter.cs" />
     <Compile Include="BCSTMToWavForm.cs">
       <SubType>Form</SubType>
     </Compile>
