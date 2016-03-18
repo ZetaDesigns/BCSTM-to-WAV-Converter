@@ -1,15 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace BCSTM_to_Wav_Converter_GUI
+﻿namespace BCSTM_to_Wav_Converter_GUI
 {
+	using System;
+	using System.Windows.Forms;
+
 	public static class MainForm
 	{
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		public static void Main()
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
