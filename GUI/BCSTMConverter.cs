@@ -4,6 +4,7 @@
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
 
@@ -29,7 +30,7 @@
 			return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\VGMStream\convert.exe";
 		}
 
-		public void Run()
+		public void Run(CancellationToken cancellationToken)
 		{
 			if (this.paths.Length == 0)
 			{
@@ -56,15 +57,30 @@
 					var filesToConvert = FindStreamFiles(path);
 
 					this.form.Log($"Number of files to convert: {filesToConvert.Length}");
-					Parallel.ForEach(filesToConvert, currentFile => { this.ConvertToWav(currentFile, outputPath); });
+					Parallel.ForEach(filesToConvert, (currentFile, state) =>
+							{
+								this.ConvertToWav(currentFile, outputPath);
+
+								if (cancellationToken.IsCancellationRequested)
+								{
+									this.LogMessage("Cancelled.");
+									state.Break();
+								}
+							});
 				}
 				else
 				{
+					if (cancellationToken.IsCancellationRequested)
+					{
+						this.LogMessage("Cancelled.");
+						return;
+					}
+
 					this.ConvertToWav(path, outputPath);
 				}
 			}
 
-			MessageBox.Show("Finished!");
+			MessageBox.Show("Done!");
 		}
 
 		private void LogMessage(string message)
@@ -74,7 +90,7 @@
 
 		private static string SetOutputPath(string outputPath)
 		{
-			outputPath = new FileInfo(outputPath).DirectoryName + @"\converted\";
+			outputPath = new FileInfo(outputPath).DirectoryName;
 
 			if (!Directory.Exists(outputPath))
 			{
@@ -115,17 +131,23 @@
 												Arguments = $"-o {Path.GetFileNameWithoutExtension(inputPath)}.wav {file}", 
 												WorkingDirectory = outputDir, 
 												UseShellExecute = false, 
-												RedirectStandardOutput = true,
+												RedirectStandardOutput = true, 
 												CreateNoWindow = true
 											};
 
 				var process = Process.Start(converterProcess);
 				process.WaitForExit();
 
+				this.form.UpdateProgressBar();
+				this.form.IncrementNumberOfFilesDone();
+
 				if (process.ExitCode == 0)
 				{
-					this.form.UpdateProgressBar();
-					this.LogMessage($"{file.Name} converted successfully");
+					this.LogMessage($"{file.Name} converted successfully.");
+				}
+				else
+				{
+					this.LogMessage($"{file.Name} conversion failed.");
 				}
 			}
 			catch (FileNotFoundException ex)

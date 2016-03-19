@@ -6,10 +6,19 @@
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Forms;
+	using System.Windows.Shell;
+
+	using Microsoft.WindowsAPICodePack.Taskbar;
 
 	public partial class BCSTMToWavForm : Form
 	{
 		private BCSTMConverter converter;
+
+		private int currentFileCount;
+
+		private int totalFileCount;
+
+		private CancellationTokenSource cancellationTokenSource;
 
 		public BCSTMToWavForm()
 		{
@@ -26,7 +35,14 @@
 				var selected = files.FileNames;
 
 				var filesBoxHasItems = this.filesBox.Items.Count > 0;
-				this.filesBox.Items.AddRange(selected);
+				const int MaxPathLength = 260;
+				if (selected.Any(a => a.Length > MaxPathLength))
+				{
+					Log($"The following paths have a length larger than {MaxPathLength} characters and will not be added:");
+					Log(string.Join(Environment.NewLine, selected.Where(a => a.Length > MaxPathLength).ToArray()));
+				}
+
+				this.filesBox.Items.AddRange(selected.Where(a => a.EndsWith(".bcstm") && a.Length < MaxPathLength).ToArray());
 
 				if (!filesBoxHasItems)
 				{
@@ -50,13 +66,24 @@
 			var files = this.filesBox.Items.OfType<string>().ToArray();
 			var output = this.outputTextbox.Text;
 
-			this.progressBar.Value = 0;
-			this.progressBar.Maximum = this.filesBox.Items.Count;
+			this.InitializeUI(files.Length);
 
 			this.converter = new BCSTMConverter(files, output, this);
 
-			var task = new Task(() => this.converter.Run());
-			task.Start();
+			TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Normal);
+
+			this.cancellationTokenSource = new CancellationTokenSource();
+			Task.Factory.StartNew(() => this.converter.Run(this.cancellationTokenSource.Token), this.cancellationTokenSource.Token);
+			this.cancellationTokenSource.Token.Register(() => MessageBox.Show("Operation cancelled."));
+		}
+
+		private void InitializeUI(int fileCount)
+		{
+			this.progressBar.Value = 0;
+			this.progressBar.Maximum = this.filesBox.Items.Count;
+			this.currentFileCount = 0;
+			this.totalFileCount = fileCount;
+			TaskbarManager.Instance.SetProgressValue(0, this.progressBar.Maximum);
 		}
 
 		private void browseButton_Click(object sender, EventArgs e)
@@ -98,20 +125,24 @@
 
 		public void UpdateProgressBar()
 		{
-			try
-			{
-				this.progressBar.PerformStep();
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message);
-			}
+			this.progressBar.PerformStep();
+			TaskbarManager.Instance.SetProgressValue(this.progressBar.Value, this.progressBar.Maximum);
 		}
-
 		public void Log(string message)
 		{
-			this.logTextBox.AppendText(message);
+			this.logTextBox.AppendText(message + Environment.NewLine);
 			this.logTextBox.ScrollToCaret();
+		}
+
+		public void IncrementNumberOfFilesDone()
+		{
+			this.currentFileCount++;
+			this.currentFileStatusLabel.Text = $"{this.currentFileCount}/{this.totalFileCount}";
+		}
+
+		private void stopButton_Click(object sender, EventArgs e)
+		{
+			this.cancellationTokenSource.Cancel();
 		}
 	}
 }
