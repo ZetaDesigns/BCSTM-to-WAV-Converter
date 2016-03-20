@@ -1,7 +1,7 @@
-# BCSTM-to-WAV-Converter
+# BCSTM to WAV Converter (now with GUI!)
 Front-end for VGMStream, which batch converts Nintendo 3DS BCSTM audio files into PCM WAV
 ___
-##Usage
+##Usage (old and for CLI version only)
 
 ```BCSTM-to-WAV.exe Path\To\File```
 
