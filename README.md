@@ -4,4 +4,4 @@ Front-end for VGMStream, which batch converts Nintendo 3DS BCSTM audio files int
 ## Dependencies
 VGMStream, included in every release - for actually converting the files
 
-Microsoft.WindowsAPICodePack - for Windows taskbar progress bar management
+Microsoft.WindowsAPICodePack, also included in every release - for Windows taskbar progress bar management
