@@ -5,8 +5,11 @@ namespace BCSTM_to_Wav_Converter_GUI
 {
 	using System;
 	using System.ComponentModel;
+	using System.Diagnostics;
+	using System.Drawing;
 	using System.IO;
 	using System.Linq;
+	using System.Reflection;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows.Documents;
@@ -77,9 +80,11 @@ namespace BCSTM_to_Wav_Converter_GUI
 
 			if (files.Length == 0)
 			{
-				MessageBox.Show("No files selected for conversion.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				MessageBox.Show("No files selected for conversion.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
+
+			BCSTMConverter.CheckIfVgmStreamAvailable();
 
 			this.InitializeUI(files.Length);
 
@@ -114,6 +119,7 @@ namespace BCSTM_to_Wav_Converter_GUI
 
 			this.currentFileCount = 0;
 			this.totalFileCount = fileCount;
+			this.currentFileStatusLabel.ResetForeColor();
 
 			TaskbarManager.Instance.SetProgressValue(0, this.progressBar.Maximum);
 		}
@@ -209,7 +215,7 @@ namespace BCSTM_to_Wav_Converter_GUI
 					MessageBoxButtons.YesNo, 
 					MessageBoxIcon.Question);
 
-				if (message == DialogResult.OK)
+				if (message == DialogResult.Yes)
 				{
 					this.cancellationTokenSource.Cancel();
 					TaskbarManager.Instance.SetProgressState(TaskbarProgressBarState.Error);
@@ -237,6 +243,7 @@ namespace BCSTM_to_Wav_Converter_GUI
 					{
 						if (options.CancellationToken.IsCancellationRequested)
 						{
+							KillRunningConversionProcesses();
 							this.converterWorker.ReportProgress(0, "Cancelled.");
 							loopState.Break();
 						}
@@ -245,6 +252,15 @@ namespace BCSTM_to_Wav_Converter_GUI
 						BCSTMConverter.Run(currentFile, output, out result);
 						this.converterWorker.ReportProgress(0, result);
 					});
+		}
+
+		private static void KillRunningConversionProcesses()
+		{
+			// pretty evil
+			foreach (var process in Process.GetProcesses().Where(a => a.ProcessName == "convert"))
+			{
+				process.Kill();
+			}
 		}
 
 		private void uiWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -280,9 +296,15 @@ namespace BCSTM_to_Wav_Converter_GUI
 
 		private void converterWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
+			if (!this.cancellationTokenSource.IsCancellationRequested)
+			{
+				MessageBox.Show("Batch conversion done!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
+
 			this.progressBar.Value = 0;
 			TaskbarManager.Instance.SetProgressValue(0, 100);
 			this.taskIsRunning = false;
+			this.currentFileStatusLabel.ForeColor = Color.Tomato;
 		}
 	}
 }

@@ -16,24 +16,13 @@
 
 		public static void Run(string input, string output, out string result)
 		{
-			if (input.Length == 0)
-			{
-				MessageBox.Show("No files to convert!", "Error");
-				result = "No files to convert!";
-				return;
-			}
 			ConvertToWav(input, output, out result);
-			
-
-			// MessageBox.Show("Done!");
 		}
 
 		private static void ConvertToWav(string inputPath, string outputDir, out string result)
 		{
 			try
 			{
-				CheckIfVgmStreamAvailable();
-
 				var file = new FileInfo(inputPath);
 				if (!file.Exists)
 				{
@@ -54,29 +43,37 @@
 
 				if (process.ExitCode == 0)
 				{
-					result = ($"{file.Name} converted successfully.");
+					result = $"{file.Name} converted successfully.";
 				}
 				else
 				{
-					result = ($"{file.Name} conversion failed.");
+					result = $"{file.Name} conversion failed.";
 				}
 			}
 			catch (FileNotFoundException ex)
 			{
-				result = (ex.FileName + " was not found.");
+				result = ex.FileName + " was not found.";
 			}
 			catch (IOException ex)
 			{
-				result = (ex.Message);
+				result = ex.Message;
 			}
 		}
 
-		private static void CheckIfVgmStreamAvailable()
+		public static void CheckIfVgmStreamAvailable()
 		{
 			if (!File.Exists(PathToConverter))
 			{
-				var currentPath = PathToConverter;
-				MessageBox.Show($"VGMStream not found! Make sure there's a \"VGMStream\" folder at: \r\n{currentPath}");
+				var currentPath = Path.GetDirectoryName(PathToConverter.Substring(0, PathToConverter.LastIndexOf("\\")));
+				var result = MessageBox.Show(
+					$"VGMStream not found! Make sure there's a \"VGMStream\" folder at: \r\n{currentPath}\r\n\r\nWould you like to open that directory?", 
+					"VGMStream missing!", 
+					MessageBoxButtons.YesNo);
+
+				if (result == DialogResult.Yes)
+				{
+					Process.Start("explorer.exe", currentPath);
+				}
 			}
 		}
 	}
