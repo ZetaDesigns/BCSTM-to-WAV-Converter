@@ -31,7 +31,7 @@
 
 				var converterProcess = new ProcessStartInfo(PathToConverter)
 											{
-												Arguments = $"-o {Path.GetFileNameWithoutExtension(inputPath)}.wav {file}", 
+												Arguments = $"-o \"{Path.GetFileNameWithoutExtension(inputPath)}.wav\" \"{file}\"", 
 												WorkingDirectory = outputDir, 
 												UseShellExecute = false, 
 												RedirectStandardOutput = true, 
