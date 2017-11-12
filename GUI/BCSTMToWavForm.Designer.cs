@@ -39,6 +39,7 @@
             this.addButton = new System.Windows.Forms.Button();
             this.filesBox = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.clear = new System.Windows.Forms.Button();
             this.convertButton = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.logTextBox = new System.Windows.Forms.RichTextBox();
@@ -52,7 +53,8 @@
             this.currentFileStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.converterWorker = new System.ComponentModel.BackgroundWorker();
-            this.Clear = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -66,7 +68,7 @@
             // removeButton
             // 
             this.removeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.removeButton.Location = new System.Drawing.Point(200, 187);
+            this.removeButton.Location = new System.Drawing.Point(304, 275);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(75, 23);
             this.removeButton.TabIndex = 1;
@@ -77,7 +79,7 @@
             // addButton
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.addButton.Location = new System.Drawing.Point(119, 187);
+            this.addButton.Location = new System.Drawing.Point(223, 275);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
             this.addButton.TabIndex = 0;
@@ -94,7 +96,7 @@
             this.filesBox.Location = new System.Drawing.Point(6, 19);
             this.filesBox.Name = "filesBox";
             this.filesBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.filesBox.Size = new System.Drawing.Size(269, 160);
+            this.filesBox.Size = new System.Drawing.Size(373, 238);
             this.filesBox.TabIndex = 2;
             // 
             // groupBox1
@@ -102,21 +104,34 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.Clear);
+            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.clear);
             this.groupBox1.Controls.Add(this.filesBox);
             this.groupBox1.Controls.Add(this.addButton);
             this.groupBox1.Controls.Add(this.removeButton);
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(281, 216);
+            this.groupBox1.Size = new System.Drawing.Size(385, 304);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Files/Folders";
             // 
+            // clear
+            // 
+            this.clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.clear.Location = new System.Drawing.Point(142, 275);
+            this.clear.Name = "clear";
+            this.clear.Size = new System.Drawing.Size(75, 23);
+            this.clear.TabIndex = 3;
+            this.clear.Text = "Clear";
+            this.clear.UseVisualStyleBackColor = true;
+            this.clear.Click += new System.EventHandler(this.Clear_Click);
+            // 
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.convertButton.Location = new System.Drawing.Point(426, 294);
+            this.convertButton.Location = new System.Drawing.Point(639, 382);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(75, 23);
             this.convertButton.TabIndex = 2;
@@ -128,9 +143,9 @@
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(12, 294);
+            this.progressBar.Location = new System.Drawing.Point(12, 382);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(408, 23);
+            this.progressBar.Size = new System.Drawing.Size(621, 23);
             this.progressBar.Step = 1;
             this.progressBar.TabIndex = 5;
             // 
@@ -142,7 +157,7 @@
             this.logTextBox.Location = new System.Drawing.Point(6, 19);
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
-            this.logTextBox.Size = new System.Drawing.Size(267, 191);
+            this.logTextBox.Size = new System.Drawing.Size(376, 279);
             this.logTextBox.TabIndex = 6;
             this.logTextBox.Text = "";
             // 
@@ -154,7 +169,7 @@
             this.groupBox2.Controls.Add(this.logTextBox);
             this.groupBox2.Location = new System.Drawing.Point(3, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(279, 216);
+            this.groupBox2.Size = new System.Drawing.Size(388, 304);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Log";
@@ -165,13 +180,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputTextbox.Location = new System.Drawing.Point(6, 19);
             this.outputTextbox.Name = "outputTextbox";
-            this.outputTextbox.Size = new System.Drawing.Size(477, 20);
+            this.outputTextbox.Size = new System.Drawing.Size(690, 20);
             this.outputTextbox.TabIndex = 9;
             // 
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(489, 19);
+            this.browseButton.Location = new System.Drawing.Point(702, 19);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(75, 20);
             this.browseButton.TabIndex = 10;
@@ -185,9 +200,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.outputTextbox);
             this.groupBox3.Controls.Add(this.browseButton);
-            this.groupBox3.Location = new System.Drawing.Point(12, 235);
+            this.groupBox3.Location = new System.Drawing.Point(12, 323);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(570, 53);
+            this.groupBox3.Size = new System.Drawing.Size(783, 53);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Output Folder";
@@ -195,7 +210,7 @@
             // abortButton
             // 
             this.abortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.abortButton.Location = new System.Drawing.Point(507, 294);
+            this.abortButton.Location = new System.Drawing.Point(720, 382);
             this.abortButton.Name = "abortButton";
             this.abortButton.Size = new System.Drawing.Size(75, 23);
             this.abortButton.TabIndex = 12;
@@ -218,8 +233,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
-            this.splitContainer1.Size = new System.Drawing.Size(588, 225);
-            this.splitContainer1.SplitterDistance = 290;
+            this.splitContainer1.Size = new System.Drawing.Size(801, 313);
+            this.splitContainer1.SplitterDistance = 394;
             this.splitContainer1.TabIndex = 13;
             // 
             // statusStrip1
@@ -227,9 +242,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.currentFileStatusLabel,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 320);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 408);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(594, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(807, 22);
             this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -243,7 +258,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(555, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(768, 17);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "Use the \"Add\" button or drag and drop files into the window.";
             // 
@@ -255,15 +270,28 @@
             this.converterWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.uiWorker_ProgressChanged);
             this.converterWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.converterWorker_RunWorkerCompleted);
             // 
-            // Clear
+            // radioButton1
             // 
-            this.Clear.Location = new System.Drawing.Point(38, 187);
-            this.Clear.Name = "Clear";
-            this.Clear.Size = new System.Drawing.Size(75, 23);
-            this.Clear.TabIndex = 3;
-            this.Clear.Text = "Clear";
-            this.Clear.UseVisualStyleBackColor = true;
-            this.Clear.Click += new System.EventHandler(this.Clear_Click);
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(6, 275);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(49, 17);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "OGG";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Checked = true;
+            this.radioButton2.Location = new System.Drawing.Point(61, 275);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(50, 17);
+            this.radioButton2.TabIndex = 5;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "WAV";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // BCSTMToWavForm
             // 
@@ -271,7 +299,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(594, 342);
+            this.ClientSize = new System.Drawing.Size(807, 430);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.abortButton);
@@ -285,6 +313,7 @@
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BCSTMToWavForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.BCSTMToWavForm_DragEnter);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -318,7 +347,9 @@
 		private ToolStripStatusLabel currentFileStatusLabel;
 		private ToolStripStatusLabel toolStripStatusLabel1;
 		private BackgroundWorker converterWorker;
-        private Button Clear;
+        private Button clear;
+        private RadioButton radioButton2;
+        private RadioButton radioButton1;
     }
 }
 

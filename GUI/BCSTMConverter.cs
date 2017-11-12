@@ -14,30 +14,33 @@
 			return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\VGMStream\convert.exe";
 		}
 
-		public static void Run(string input, string output, out string result)
+		public static void Run(string input, string output, out string result, bool wav)
 		{
-			ConvertToWav(input, output, out result);
+			ConvertToWav(input, output, out result, wav);
 		}
 
-		private static void ConvertToWav(string inputPath, string outputDir, out string result)
+		private static void ConvertToWav(string inputPath, string outputDir, out string result, bool wav)
 		{
 			try
 			{
+                var extension = "wav";
 				var file = new FileInfo(inputPath);
 				if (!file.Exists)
 				{
 					throw new FileNotFoundException($"File {file.Name} not found!");
 				}
-
-				var converterProcess = new ProcessStartInfo(PathToConverter)
-											{
-												Arguments = $"-o \"{Path.GetFileNameWithoutExtension(inputPath)}.wav\" \"{file}\"", 
-												WorkingDirectory = outputDir, 
-												UseShellExecute = false, 
-												RedirectStandardOutput = true, 
-												CreateNoWindow = true
-											};
-
+                if(!wav)
+                {
+                    extension = "ogg";
+                }
+                var converterProcess = new ProcessStartInfo(PathToConverter)
+                {
+                    Arguments = $"-o \"{Path.GetFileNameWithoutExtension(inputPath)}.{extension}\" \"{file}\" ",
+                    WorkingDirectory = outputDir,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true
+                };
 				var process = Process.Start(converterProcess);
 				process.WaitForExit();
 

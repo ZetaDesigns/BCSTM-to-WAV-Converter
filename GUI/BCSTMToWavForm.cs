@@ -256,9 +256,13 @@ namespace BCSTM_to_Wav_Converter_GUI
 							this.converterWorker.ReportProgress(0, "Cancelled.");
 							loopState.Break();
 						}
-
-						string result;
-						BCSTMConverter.Run(currentFile, output, out result);
+                        var wav = true;
+                        if (!this.radioButton2.Checked)
+                        {
+                            wav = false;
+                        }
+                        string result;
+						BCSTMConverter.Run(currentFile, output, out result, wav);
 						this.converterWorker.ReportProgress(0, result);
 					});
 		}
