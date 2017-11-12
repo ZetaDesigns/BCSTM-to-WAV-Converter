@@ -100,7 +100,16 @@ namespace BCSTM_to_Wav_Converter_GUI
 			this.converterWorker.RunWorkerAsync(arguments);
 		}
 
-		private static string SetOutputPath(string outputPath)
+        private void Clear_Click(object sender, EventArgs e)
+        {
+            var allItems = this.filesBox.Items.OfType<string>().ToArray();
+            foreach (string item in allItems)
+            {
+                this.filesBox.Items.Remove(item);
+            }
+        }
+
+        private static string SetOutputPath(string outputPath)
 		{
 			outputPath = new FileInfo(outputPath).DirectoryName;
 
@@ -306,5 +315,5 @@ namespace BCSTM_to_Wav_Converter_GUI
 			this.taskIsRunning = false;
 			this.currentFileStatusLabel.ForeColor = Color.Tomato;
 		}
-	}
+    }
 }
