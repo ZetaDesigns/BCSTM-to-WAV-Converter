@@ -35,10 +35,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BCSTMToWavForm));
             this.removeButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.filesBox = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.clear = new System.Windows.Forms.Button();
             this.convertButton = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
@@ -53,8 +56,6 @@
             this.currentFileStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.converterWorker = new System.ComponentModel.BackgroundWorker();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -117,6 +118,29 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Files/Folders";
             // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Checked = true;
+            this.radioButton2.Location = new System.Drawing.Point(61, 275);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(50, 17);
+            this.radioButton2.TabIndex = 5;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "WAV";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(6, 275);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(49, 17);
+            this.radioButton1.TabIndex = 4;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "OGG";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
             // clear
             // 
             this.clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -131,12 +155,13 @@
             // convertButton
             // 
             this.convertButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.convertButton.BackColor = System.Drawing.Color.LawnGreen;
             this.convertButton.Location = new System.Drawing.Point(639, 382);
             this.convertButton.Name = "convertButton";
             this.convertButton.Size = new System.Drawing.Size(75, 23);
             this.convertButton.TabIndex = 2;
             this.convertButton.Text = "Convert";
-            this.convertButton.UseVisualStyleBackColor = true;
+            this.convertButton.UseVisualStyleBackColor = false;
             this.convertButton.Click += new System.EventHandler(this.convertButton_Click);
             // 
             // progressBar
@@ -210,12 +235,13 @@
             // abortButton
             // 
             this.abortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.abortButton.BackColor = System.Drawing.Color.Red;
             this.abortButton.Location = new System.Drawing.Point(720, 382);
             this.abortButton.Name = "abortButton";
             this.abortButton.Size = new System.Drawing.Size(75, 23);
             this.abortButton.TabIndex = 12;
             this.abortButton.Text = "Stop";
-            this.abortButton.UseVisualStyleBackColor = true;
+            this.abortButton.UseVisualStyleBackColor = false;
             this.abortButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // splitContainer1
@@ -270,29 +296,6 @@
             this.converterWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.uiWorker_ProgressChanged);
             this.converterWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.converterWorker_RunWorkerCompleted);
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 275);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(49, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "OGG";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(61, 275);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(50, 17);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "WAV";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
             // BCSTMToWavForm
             // 
             this.AcceptButton = this.convertButton;
@@ -306,9 +309,10 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.convertButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(484, 285);
             this.Name = "BCSTMToWavForm";
-            this.Text = "BCSTM To WAV Converter";
+            this.Text = "BConv";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BCSTMToWavForm_FormClosing);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BCSTMToWavForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.BCSTMToWavForm_DragEnter);
